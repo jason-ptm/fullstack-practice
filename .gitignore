@@ -29,5 +29,6 @@ $RECYCLE.BIN/
 
 node_modules
 package-lock.json
+.env
 
 # End of https://www.toptal.com/developers/gitignore/api/windows
