@@ -1,0 +1,17 @@
+{
+  "name": "@project/fullstack-practice",
+  "private": "true",
+  "version": "0.0.1",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "co": "sui-mono commit"
+  },
+  "dependencies": {
+    "@s-ui/mono": "^2.45.0",
+    "bun": "latest",
+    "bun-types": "latest",
+    "typescript": "latest"
+  }
+}
