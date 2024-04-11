@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const routerApi = require("./routes");
+const { ormErrorHandler, boomErrorHandler, errorHandler } = require("./middlewares/error.handler");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +23,12 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Welcome to my app");
 });
+
+routerApi(app);
+
+app.use(ormErrorHandler);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`App running in port ${port}`);
