@@ -50,10 +50,10 @@ const PostSchema = {
 class Post extends Model {
   static associate(models) {
     this.belongsTo(models.User, {
-      as: "owner",
+      as: "user",
     });
     this.hasMany(models.Interaction, {
-      as: "interactions",
+      as: "interaction",
       foreignKey: "postId",
     });
   }
@@ -64,6 +64,7 @@ class Post extends Model {
       tableName: POST_TABLE,
       modelName: "Post",
       timestamps: true,
+      paranoid: true,
     };
   }
 }
