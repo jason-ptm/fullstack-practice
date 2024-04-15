@@ -18,7 +18,25 @@ class PostService {
   }
 
   async getAll() {
-    const post = await models.Post.findAll();
+    const post = await models.Post.findAll({
+      attributes: {
+        exclude: ["deletedAt"],
+      },
+      include: [
+        {
+          association: "user",
+          attributes: ["id", "fullName"],
+        },
+        {
+          association: "interaction",
+          attributes: ["userId"],
+          include: {
+            association: "user",
+            attributes: ["fullName"],
+          },
+        },
+      ],
+    });
     return post;
   }
 
