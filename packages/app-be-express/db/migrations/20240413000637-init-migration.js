@@ -22,7 +22,7 @@ module.exports = {
       },
       password: {
         allowNull: false,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.STRING,
       },
       createdAt: {
         field: "created_at",

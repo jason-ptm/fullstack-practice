@@ -16,7 +16,7 @@ const AccountSchema = {
   },
   password: {
     allowNull: false,
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   createdAt: {
     field: "created_at",
