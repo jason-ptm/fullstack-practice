@@ -24,4 +24,9 @@ const updatePostSchema = Joi.object({
   userId: id.required(),
 });
 
-module.exports = { getPostSchema, createPostSchema, updatePostSchema, deletePostSchema };
+const likePostSchema = Joi.object({
+  userId: id.required(),
+  postId: id.required(),
+});
+
+module.exports = { getPostSchema, createPostSchema, updatePostSchema, deletePostSchema, likePostSchema };

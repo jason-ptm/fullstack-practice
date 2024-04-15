@@ -1,11 +1,13 @@
 const express = require("express");
 
 const validatorHandler = require("../middlewares/validator.handler");
-const { getPostSchema, createPostSchema, updatePostSchema, deletePostSchema } = require("../schemas/post.schema");
+const { getPostSchema, createPostSchema, updatePostSchema, deletePostSchema, likePostSchema } = require("../schemas/post.schema");
 const PostService = require("../services/post.service");
+const Interaction = require("../services/interaction.service");
 
 const router = express.Router();
 const service = new PostService();
+const interactionService = new Interaction();
 
 router.get("/", async (req, res, next) => {
   try {
@@ -44,6 +46,17 @@ router.delete("/:id", validatorHandler(getPostSchema, "params"), validatorHandle
     const { id } = req.params;
     const data = await service.delete(id);
     res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/like", validatorHandler(likePostSchema, "body"), async (req, res, next) => {
+  try {
+    const data = req.body;
+    const ok = await interactionService.toggleLike(data);
+
+    res.json(ok);
   } catch (error) {
     next(error);
   }
