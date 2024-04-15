@@ -27,11 +27,7 @@ class UserService {
   }
 
   async getOne(id) {
-    const user = await models.User.findByPk(id, {
-      attributes: {
-        exclude: ["AccountId"],
-      },
-    });
+    const user = await models.User.findByPk(id, {});
 
     return user;
   }
