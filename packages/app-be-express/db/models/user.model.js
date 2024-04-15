@@ -32,7 +32,7 @@ const UserSchema = {
 
 class User extends Model {
   static associate(models) {
-    this.belongsTo(models.Account);
+    this.belongsTo(models.Account, { as: "account" });
     this.hasMany(models.Post, {
       as: "posts",
       foreignKey: "userId",
