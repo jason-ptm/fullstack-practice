@@ -4,10 +4,10 @@ const ACCOUNT_TABLE = "accounts";
 
 const AccountSchema = {
   id: {
-    allowNull: false,
+    allowNull: true,
     primaryKey: true,
-    type: DataTypes.UUIDV4,
-    defaultValue: Sequelize.UUIDV4,
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.literal("gen_random_uuid()"),
   },
   email: {
     unique: true,
@@ -18,13 +18,30 @@ const AccountSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  createdAt: {
+    field: "created_at",
+    allowNull: true,
+    type: "TIMESTAMP",
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+  },
+  updatedAt: {
+    field: "updated_at",
+    allowNull: true,
+    type: "TIMESTAMP",
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
+  },
+  deletedAt: {
+    field: "deleted_at",
+    allowNull: true,
+    type: "TIMESTAMP",
+  },
 };
 
 class Account extends Model {
   static associate(models) {
     this.hasOne(models.User, {
       as: "user",
-      foreignKey: "userId",
+      foreignKey: "accountId",
     });
   }
 
@@ -33,7 +50,7 @@ class Account extends Model {
       sequelize,
       tableName: ACCOUNT_TABLE,
       modelName: "Account",
-      timeStamps: true,
+      paranoid: true,
     };
   }
 }

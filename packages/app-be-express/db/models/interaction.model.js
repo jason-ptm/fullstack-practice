@@ -1,13 +1,33 @@
 const { DataTypes, Sequelize, Model } = require("sequelize");
+const { POST_TABLE } = require("../models/post.model");
+const { USER_TABLE } = require("../models/user.model");
 
 const INTERACTION_TABLE = "interactions";
 
 const InteractionSchema = {
   id: {
-    allowNull: false,
+    allowNull: true,
     primaryKey: true,
-    type: DataTypes.UUIDV4,
-    defaultValue: Sequelize.UUIDV4,
+    type: DataTypes.UUID,
+    defaultValue: Sequelize.Sequelize.literal("gen_random_uuid()"),
+  },
+  postId: {
+    field: "post_id",
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: POST_TABLE,
+      key: "id",
+    },
+  },
+  userId: {
+    field: "user_id",
+    allowNull: false,
+    type: DataTypes.UUID,
+    references: {
+      model: USER_TABLE,
+      key: "id",
+    },
   },
 };
 
@@ -26,7 +46,7 @@ class Interaction extends Model {
       sequelize,
       tableName: INTERACTION_TABLE,
       modelName: "Interaction",
-      timeStamps: false,
+      timestamps: false,
     };
   }
 }

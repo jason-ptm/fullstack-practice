@@ -4,13 +4,13 @@ const { Post, PostSchema } = require("./post.model");
 const { User, UserSchema } = require("./user.model");
 
 function setUpModels(sequelize) {
-  User.init(UserSchema, User.config(sequelize));
   Account.init(AccountSchema, Account.config(sequelize));
-  Post.init(PostSchema, Account.config(sequelize));
-  Interaction.init(InteractionSchema, Account.config(sequelize));
+  User.init(UserSchema, User.config(sequelize));
+  Post.init(PostSchema, Post.config(sequelize));
+  Interaction.init(InteractionSchema, Interaction.config(sequelize));
 
-  User.associate(sequelize.models);
   Account.associate(sequelize.models);
+  User.associate(sequelize.models);
   Post.associate(sequelize.models);
   Interaction.associate(sequelize.models);
 }
