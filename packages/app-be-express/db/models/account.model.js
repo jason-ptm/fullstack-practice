@@ -28,7 +28,7 @@ const AccountSchema = {
     field: "updated_at",
     allowNull: true,
     type: "TIMESTAMP",
-    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
   },
   deletedAt: {
     field: "deleted_at",

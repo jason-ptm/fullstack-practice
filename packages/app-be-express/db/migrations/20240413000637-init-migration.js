@@ -12,29 +12,29 @@ module.exports = {
       id: {
         allowNull: true,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.Sequelize.literal("gen_random_uuid()"),
       },
       email: {
         unique: true,
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
       },
       password: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
       },
       createdAt: {
         field: "created_at",
         allowNull: true,
         type: "TIMESTAMP",
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         field: "updated_at",
         allowNull: true,
         type: "TIMESTAMP",
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       deletedAt: {
         field: "deleted_at",
@@ -47,21 +47,21 @@ module.exports = {
       id: {
         allowNull: true,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.Sequelize.literal("gen_random_uuid()"),
       },
       fullName: {
         field: "full_name",
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
       },
       age: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: Sequelize.DataTypes.INTEGER,
       },
       accountId: {
         field: "account_id",
-        type: DataTypes.UUID,
+        type: Sequelize.DataTypes.UUID,
         allowNull: false,
         references: {
           model: ACCOUNT_TABLE,
@@ -74,20 +74,20 @@ module.exports = {
       id: {
         allowNull: true,
         primaryKey: true,
-        type: DataTypes.UUID,
+        type: Sequelize.DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
       title: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
       },
       content: {
         allowNull: false,
-        type: DataTypes.STRING,
+        type: Sequelize.DataTypes.STRING,
       },
       userId: {
         field: "user_id",
-        type: DataTypes.UUID,
+        type: Sequelize.DataTypes.UUID,
         allowNull: false,
         references: {
           model: USER_TABLE,
@@ -97,19 +97,19 @@ module.exports = {
       createdAt: {
         field: "created_at",
         allowNull: true,
-        type: DataTypes.DATE,
+        type: Sequelize.DataTypes.DATE,
         defaultValue: Sequelize.Sequelize.fn("NOW"),
       },
       updatedAt: {
         field: "updated_at",
         allowNull: true,
-        type: DataTypes.DATE,
+        type: Sequelize.DataTypes.DATE,
         defaultValue: Sequelize.Sequelize.fn("NOW"),
       },
       deletedAt: {
         field: "deleted_at",
         allowNull: true,
-        type: DataTypes.DATE,
+        type: Sequelize.DataTypes.DATE,
         defaultValue: null,
       },
     });
@@ -118,12 +118,12 @@ module.exports = {
       id: {
         allowNull: true,
         primaryKey: true,
-        type: DataTypes.UUID,
-        defaultValue: Sequelize.Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.Sequelize.Sequelize.literal("gen_random_uuid()"),
       },
       postId: {
         field: "post_id",
-        type: DataTypes.UUID,
+        type: Sequelize.DataTypes.UUID,
         allowNull: false,
         references: {
           model: POST_TABLE,
@@ -133,7 +133,7 @@ module.exports = {
       userId: {
         field: "user_id",
         allowNull: false,
-        type: DataTypes.UUID,
+        type: Sequelize.DataTypes.UUID,
         references: {
           model: USER_TABLE,
           key: "id",
