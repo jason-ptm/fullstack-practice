@@ -22,7 +22,7 @@ const updatePostSchema = Joi.object({
   data: Joi.object({
     title,
     content,
-  }),
+  }).required(),
   ownerId: id.required(),
 });
 

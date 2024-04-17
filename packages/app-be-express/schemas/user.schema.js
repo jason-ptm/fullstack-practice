@@ -16,14 +16,14 @@ const createUserSchema = Joi.object({
   account: Joi.object({
     email: email.required(),
     password: password.required(),
-  }),
+  }).required(),
 });
 
 const updateUserSchema = Joi.object({
-  data: {
+  data: Joi.object({
     fullName,
     age,
-  },
+  }).required(),
   ownerId: id.required(),
 });
 
