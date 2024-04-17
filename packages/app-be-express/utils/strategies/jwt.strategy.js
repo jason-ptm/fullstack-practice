@@ -13,7 +13,7 @@ const options = {
 
 const JwtStrategy = new Strategy(options, async (payload, done) => {
   const user = await service.checkUserAccount(payload.sub);
-  if (!user.account.deletedAt) return done(null, payload);
+  if (user && !user.account.deletedAt) return done(null, payload);
   return done(boom.unauthorized(), null);
 });
 
