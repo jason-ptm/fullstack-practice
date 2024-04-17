@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { models } = require("../libs/sequelize");
-const signToken = require("../utils/signToken.util");
+const jwt = require("jsonwebtoken");
 
 class UserService {
   constructor() {}
@@ -19,16 +19,14 @@ class UserService {
         include: ["account"],
       }
     );
+    const token = jwt.sign({ id: newUser.id });
     return {
       data: {
         id: newUser.id,
         fullName: newUser.fullName,
-        age: newUser.age,
         accountId: newUser.accountId,
       },
-      token: signToken({
-        id: newUser.accountId,
-      }),
+      token,
     };
   }
 
