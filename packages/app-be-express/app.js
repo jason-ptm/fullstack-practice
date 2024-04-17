@@ -18,6 +18,8 @@ const options = {
   },
 };
 
+require("./utils/");
+
 app.use(express.json());
 app.use(cors(options));
 
