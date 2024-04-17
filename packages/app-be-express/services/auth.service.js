@@ -34,6 +34,26 @@ class AuthService {
     }
     throw boom.unauthorized();
   }
+
+  async changePassword(user) {
+    const checkedUser = await models.Account.findOne({
+      include: {
+        association: "user",
+        where: {
+          id: user.ownerId,
+        },
+      },
+    });
+    const checkedPassword = await bcrypt.compare(user.password, checkedUser.password);
+    if (!checkedPassword) {
+      const password = await bcrypt.hash(user.password, 10);
+      await checkedUser.update({
+        password,
+      });
+      return { done: true };
+    }
+    throw boom.badData();
+  }
 }
 
 module.exports = AuthService;
