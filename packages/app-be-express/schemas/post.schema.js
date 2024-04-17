@@ -9,7 +9,7 @@ const getPostSchema = Joi.object({
 });
 
 const deletePostSchema = Joi.object({
-  userId: id.required(),
+  ownerId: id.required(),
 });
 
 const createPostSchema = Joi.object({
@@ -19,9 +19,11 @@ const createPostSchema = Joi.object({
 });
 
 const updatePostSchema = Joi.object({
-  title,
-  content,
-  userId: id.required(),
+  data: Joi.object({
+    title,
+    content,
+  }),
+  ownerId: id.required(),
 });
 
 const likePostSchema = Joi.object({

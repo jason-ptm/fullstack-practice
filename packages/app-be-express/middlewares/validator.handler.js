@@ -1,4 +1,5 @@
 const boom = require("@hapi/boom");
+const { Strategy, ExtractJwt } = require("passport-jwt");
 
 function validatorHandler(schema, property) {
   return (req, _res, next) => {
@@ -13,4 +14,13 @@ function validatorHandler(schema, property) {
   };
 }
 
-module.exports = validatorHandler;
+function checkOwnerHandler(property) {
+  return (req, res, next) => {
+    const { ownerId } = req[property];
+    const tokenId = req.user.sub;
+    if (ownerId === tokenId) return next();
+    throw boom.unauthorized();
+  };
+}
+
+module.exports = { validatorHandler, checkOwnerHandler };

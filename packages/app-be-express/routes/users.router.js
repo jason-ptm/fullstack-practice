@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 
-const validatorHandler = require("../middlewares/validator.handler");
+const { validatorHandler, checkOwnerHandler } = require("../middlewares/validator.handler");
 const { getUserSchema, createUserSchema, updateUserSchema } = require("../schemas/user.schema");
 const UserService = require("../services/user.service");
 
@@ -28,13 +28,13 @@ router.post("/", validatorHandler(createUserSchema, "body"), async (req, res, ne
   }
 });
 
-router.patch("/:id", passport.authenticate("jwt", { session: false }), validatorHandler(getUserSchema, "params"), validatorHandler(updateUserSchema, "body"), async (req, res, next) => {
+router.patch("/:id", checkOwnerHandler("body"), passport.authenticate("jwt", { session: false }), validatorHandler(getUserSchema, "params"), validatorHandler(updateUserSchema, "body"), async (req, res, next) => {
   try {
     const { id } = req.params;
-    const body = req.body;
+    const { data } = req.body;
 
-    const data = await service.update(id, body);
-    res.json(data);
+    const newData = await service.update(id, data);
+    res.json(newData);
   } catch (error) {
     next(error);
   }

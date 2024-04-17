@@ -1,6 +1,6 @@
 const express = require("express");
 
-const validatorHandler = require("../middlewares/validator.handler");
+const { validatorHandler, checkOwnerHandler } = require("../middlewares/validator.handler");
 const { getPostSchema, createPostSchema, updatePostSchema, deletePostSchema, likePostSchema } = require("../schemas/post.schema");
 const PostService = require("../services/post.service");
 const Interaction = require("../services/interaction.service");
@@ -29,7 +29,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), validatorHand
   }
 });
 
-router.patch("/:id", passport.authenticate("jwt", { session: false }), validatorHandler(getPostSchema, "params"), validatorHandler(updatePostSchema, "body"), async (req, res, next) => {
+router.patch("/:id", passport.authenticate("jwt", { session: false }), checkOwnerHandler("body"), validatorHandler(getPostSchema, "params"), validatorHandler(updatePostSchema, "body"), async (req, res, next) => {
   try {
     const { id } = req.params;
     const body = req.body;
@@ -41,7 +41,7 @@ router.patch("/:id", passport.authenticate("jwt", { session: false }), validator
   }
 });
 
-router.delete("/:id", passport.authenticate("jwt", { session: false }), validatorHandler(getPostSchema, "params"), validatorHandler(deletePostSchema, "body"), async (req, res, next) => {
+router.delete("/:id", passport.authenticate("jwt", { session: false }), checkOwnerHandler("body"), validatorHandler(getPostSchema, "params"), validatorHandler(deletePostSchema, "body"), async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = await service.delete(id);

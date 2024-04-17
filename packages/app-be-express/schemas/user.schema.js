@@ -20,8 +20,11 @@ const createUserSchema = Joi.object({
 });
 
 const updateUserSchema = Joi.object({
-  fullName,
-  age,
+  data: {
+    fullName,
+    age,
+  },
+  ownerId: id.required(),
 });
 
 module.exports = { getUserSchema, createUserSchema, updateUserSchema };

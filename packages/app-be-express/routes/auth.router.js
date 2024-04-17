@@ -1,5 +1,5 @@
 const express = require("express");
-const validatorHandler = require("../middlewares/validator.handler");
+const { validatorHandler } = require("../middlewares/validator.handler");
 const { loginSchema } = require("../schemas/auth.schema");
 const AuthService = require("../services/auth.service");
 
@@ -16,4 +16,4 @@ router.post("/login", validatorHandler(loginSchema, "body"), async (req, res, ne
   }
 });
 
-module.exports = router
+module.exports = router;
