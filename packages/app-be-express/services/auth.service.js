@@ -35,24 +35,33 @@ class AuthService {
     throw boom.unauthorized();
   }
 
-  async changePassword(user) {
-    const checkedUser = await models.Account.findOne({
+  async getOneByUserId(id) {
+    return await models.Account.findOne({
       include: {
         association: "user",
         where: {
-          id: user.ownerId,
+          id,
         },
       },
     });
-    const checkedPassword = await bcrypt.compare(user.password, checkedUser.password);
-    if (!checkedPassword) {
-      const password = await bcrypt.hash(user.password, 10);
-      await checkedUser.update({
-        password,
-      });
+  }
+
+  async update(user) {
+    const checkedUser = await this.getOneByUserId(user.ownerId);
+    if (checkedUser) {
+      if (user.data.password) {
+        const checkedPassword = await bcrypt.compare(user.data.password, checkedUser.password);
+        if (!checkedPassword) {
+          const password = await bcrypt.hash(user.data.password, 10);
+          user.data.password = password;
+        } else {
+          throw boom.badData();
+        }
+      }
+      await checkedUser.update(user.data);
       return { done: true };
     }
-    throw boom.badData();
+    throw boom.notFound();
   }
 }
 

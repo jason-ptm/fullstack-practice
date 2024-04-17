@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const { validatorHandler, checkOwnerHandler } = require("../middlewares/validator.handler");
-const { loginSchema, changePasswordSchema } = require("../schemas/auth.schema");
+const { loginSchema, updateAccountSchema } = require("../schemas/auth.schema");
 const AuthService = require("../services/auth.service");
 
 const router = express.Router();
@@ -17,10 +17,10 @@ router.post("/login", validatorHandler(loginSchema, "body"), async (req, res, ne
   }
 });
 
-router.post("/change-password", passport.authenticate("jwt", { session: false }), checkOwnerHandler("body"), validatorHandler(changePasswordSchema, "body"), async (req, res, next) => {
+router.patch("/", passport.authenticate("jwt", { session: false }), checkOwnerHandler("body"), validatorHandler(updateAccountSchema, "body"), async (req, res, next) => {
   try {
     const body = req.body;
-    const newUser = await service.changePassword(body);
+    const newUser = await service.update(body);
     res.json(newUser);
   } catch (error) {
     next(error);

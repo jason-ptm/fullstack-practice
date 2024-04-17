@@ -1,16 +1,20 @@
 const Joi = require("joi");
 
-const password = Joi.string().max(30).label("contraseña").required();
+const email = Joi.string().email().label("correo electrónico");
+const password = Joi.string().max(30).label("contraseña");
 const id = Joi.string().label("id").guid().required();
 
 const loginSchema = Joi.object({
-  email: Joi.string().email().required().label("correo electrónico"),
-  password,
+  email: email.required(),
+  password: password.required(),
 });
 
-const changePasswordSchema = Joi.object({
-  password,
+const updateAccountSchema = Joi.object({
+  data: Joi.object({
+    email,
+    password,
+  }).required(),
   ownerId: id,
 });
 
-module.exports = { loginSchema, changePasswordSchema };
+module.exports = { loginSchema, updateAccountSchema };
