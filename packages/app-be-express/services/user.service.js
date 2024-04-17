@@ -45,6 +45,15 @@ class UserService {
     const newUser = await model.update(data);
     return newUser;
   }
+
+  async checkUserAccount(id) {
+    const user = await models.User.findByPk(id, {
+      include: {
+        association: "account",
+      },
+    });
+    return user;
+  }
 }
 
 module.exports = UserService;

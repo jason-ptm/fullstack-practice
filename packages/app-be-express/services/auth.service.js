@@ -34,10 +34,6 @@ class AuthService {
     }
     throw boom.unauthorized();
   }
-
-  async getOne(id) {
-    return await models.Account.findByPk(id);
-  }
 }
 
 module.exports = AuthService;
