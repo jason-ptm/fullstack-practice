@@ -17,8 +17,11 @@ class PostService {
     return post;
   }
 
-  async getAll() {
+  async getAll(page = 1, pageSize = 10) {
     const post = await models.Post.findAll({
+      offset: (page - 1) * pageSize,
+      order: [["createdAt", "DESC"]],
+      limit: pageSize,
       attributes: {
         exclude: ["deletedAt"],
       },

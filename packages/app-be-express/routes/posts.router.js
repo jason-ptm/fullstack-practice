@@ -12,7 +12,8 @@ const interactionService = new Interaction();
 
 router.get("/", passport.authenticate("jwt", { session: false }), async (req, res, next) => {
   try {
-    const data = await service.getAll();
+    const { page, pageSize } = req.query;
+    const data = await service.getAll(page, pageSize);
     return res.status(200).json(data);
   } catch (error) {
     next(error);
