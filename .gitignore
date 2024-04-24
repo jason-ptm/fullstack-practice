@@ -31,5 +31,6 @@ node_modules
 package-lock.json
 .env
 postgres_data
+dist
 
 # End of https://www.toptal.com/developers/gitignore/api/windows
