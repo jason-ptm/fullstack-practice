@@ -4,9 +4,11 @@ import {
 	CreateDateColumn,
 	DeleteDateColumn,
 	Entity,
+	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
+import { User } from "./user.entity";
 
 @Entity("accounts")
 export class Auth {
@@ -21,7 +23,7 @@ export class Auth {
 
 	@CreateDateColumn({
 		type: "timestamp",
-		default: () => "CURRENT_TIMESTAMP(6)",
+		default: () => "CURRENT_TIMESTAMP",
 		nullable: false,
 		name: "created_at",
 	})
@@ -29,8 +31,8 @@ export class Auth {
 
 	@UpdateDateColumn({
 		type: "timestamp",
-		default: () => "CURRENT_TIMESTAMP(6)",
-		onUpdate: "CURRENT_TIMESTAMP(6)",
+		default: () => "CURRENT_TIMESTAMP",
+		onUpdate: "CURRENT_TIMESTAMP",
 		nullable: false,
 		name: "updated_at",
 	})
@@ -42,4 +44,9 @@ export class Auth {
 		name: "deleted_at",
 	})
 	deletedAt?: Date;
+
+	@OneToOne(() => User, (user) => user.account, {
+		nullable: false,
+	})
+	user: User;
 }

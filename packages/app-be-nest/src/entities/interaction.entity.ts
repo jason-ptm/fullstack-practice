@@ -1,14 +1,16 @@
 import { UUID } from "crypto";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Post } from "./post.entity";
+import { User } from "./user.entity";
 
 @Entity("interactions")
 export class Interaction {
 	@PrimaryGeneratedColumn("uuid")
 	id: UUID;
 
-	@Column({ nullable: false, type: "uuid" })
-	postId: UUID;
+	@ManyToOne(() => Post, (post) => post.interactions, { nullable: false })
+	post: Post;
 
-	@Column({ nullable: false, type: "uuid" })
-	userId: UUID;
+	@ManyToOne(() => User, (user) => user.interactions, { nullable: false })
+	user: User;
 }
