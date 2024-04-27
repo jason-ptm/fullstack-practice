@@ -4,7 +4,6 @@ import config from "./config/config";
 import configSchema from "./config/config.schema";
 import { DatabaseModule } from "./database/database/database.module";
 import { PostModule } from "./modules/post/post.module";
-import { AuthModule } from "./modules/user/auth/auth.module";
 import { UserModule } from "./modules/user/user.module";
 
 @Module({
@@ -16,7 +15,6 @@ import { UserModule } from "./modules/user/user.module";
 			validationSchema: configSchema,
 		}),
 		DatabaseModule,
-		AuthModule,
 		UserModule,
 		PostModule,
 	],
