@@ -3,21 +3,31 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UUID } from "crypto";
 import { User } from "src/entities/user.entity";
 import { Repository } from "typeorm";
+import { AuthService } from "./auth/auth.service";
 import { CreateUserDto, UpdateUserDto } from "./dtos/user.dto";
 
 @Injectable()
 export class UserService {
 	constructor(
 		@InjectRepository(User) private userRepository: Repository<User>,
+		private readonly authService: AuthService,
 	) {}
 
 	async findAll() {
-		return await this.userRepository.find();
+		return await this.userRepository.find({
+			relations: ["account"],
+		});
 	}
 
 	async findOne(id: UUID) {
-		const user = await this.userRepository.findOneBy({
-			id,
+		const user = await this.userRepository.findOne({
+			relations: ["account"],
+			where: { id },
+			select: {
+				account: {
+					email: true,
+				},
+			},
 		});
 
 		if (!user) throw new NotFoundException("User not found");
@@ -25,9 +35,11 @@ export class UserService {
 	}
 
 	async create(user: CreateUserDto) {
+		const account = await this.authService.create(user.account);
 		const createdUser = this.userRepository.create(user);
+		createdUser.account = account;
 		await this.userRepository.insert(createdUser);
-		return user;
+		return createdUser;
 	}
 
 	async update(data: UpdateUserDto, id: UUID) {

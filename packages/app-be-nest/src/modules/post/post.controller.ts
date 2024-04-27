@@ -16,7 +16,7 @@ import { InteractionService } from "./interaction.service";
 import { PostService } from "./post.service";
 
 @ApiTags("post")
-@Controller("post")
+@Controller("posts")
 export class PostController {
 	constructor(
 		private readonly postService: PostService,

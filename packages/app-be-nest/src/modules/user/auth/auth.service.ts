@@ -21,6 +21,12 @@ export class AuthService {
 		@InjectRepository(Auth) private authRepository: Repository<Auth>,
 	) {}
 
+	async create(data: CreateAuthDto) {
+		const account = this.authRepository.create(data);
+		await this.authRepository.insert(account);
+		return account;
+	}
+
 	async findOne(data: UpdateAuth) {
 		const user = await this.authRepository.findOneBy(data);
 		if (!user) throw new NotFoundException("User not found");
