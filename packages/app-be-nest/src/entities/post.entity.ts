@@ -1,3 +1,4 @@
+import { Exclude, Expose } from "class-transformer";
 import { UUID } from "crypto";
 import {
 	Column,
@@ -27,6 +28,7 @@ export class Post {
 	@ManyToOne(() => User, (owner) => owner.posts, { nullable: false })
 	owner: User;
 
+	@Exclude()
 	@OneToMany(() => Interaction, (interaction) => interaction.post, {
 		nullable: true,
 	})
@@ -49,10 +51,21 @@ export class Post {
 	})
 	updatedAt: Date;
 
+	@Exclude()
 	@DeleteDateColumn({
 		type: "timestamp",
 		default: null,
 		name: "deleted_at",
 	})
 	deletedAt?: Date;
+
+	@Expose()
+	get likes() {
+		if (this.interactions) {
+			return this.interactions
+				.filter((interaction) => !!interaction)
+				.map((interaction) => interaction.user.fullName);
+		}
+		return [];
+	}
 }

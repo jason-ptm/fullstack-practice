@@ -1,3 +1,4 @@
+import { Exclude } from "class-transformer";
 import { UUID } from "crypto";
 import {
 	Column,
@@ -18,6 +19,7 @@ export class Auth {
 	@Column({ unique: true, nullable: false, type: "varchar", length: 40 })
 	email: string;
 
+	@Exclude()
 	@Column({ nullable: false, type: "varchar" })
 	password: string;
 
@@ -38,6 +40,7 @@ export class Auth {
 	})
 	updatedAt: Date;
 
+	@Exclude()
 	@DeleteDateColumn({
 		type: "timestamp",
 		default: null,

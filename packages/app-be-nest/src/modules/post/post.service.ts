@@ -17,11 +17,6 @@ export class PostService {
 		return await this.postRepository.find({
 			relations: ["owner", "interactions", "interactions.user"],
 			select: {
-				title: true,
-				content: true,
-				id: true,
-				createdAt: true,
-				updatedAt: true,
 				owner: {
 					id: true,
 					fullName: true,
