@@ -15,7 +15,6 @@ import { UUID } from "crypto";
 import { Request } from "express";
 import { PayloadToken } from "src/models/token.model";
 import { AuthorizationGuard } from "src/modules/auth/guards/auth/authorization.guard";
-import { InteractionDto } from "./dtos/interaction.dto";
 import { CreatePostDto, UpdatePostDto } from "./dtos/post.dto";
 import { InteractionService } from "./interaction.service";
 import { PostService } from "./post.service";
@@ -61,10 +60,26 @@ export class PostController {
 	}
 
 	@ApiTags()
-	@Post("/interact")
-	async interact(@Body() data: InteractionDto) {
+	@Post("/:id/interact")
+	async createInteract(
+		@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID,
+		@Req() req: Request,
+	) {
 		try {
-			return await this.interactionService.react(data);
+			const { sub } = req.user as PayloadToken;
+			return await this.interactionService.create(id, sub.user);
+		} catch (error) {
+			return error;
+		}
+	}
+
+	@ApiTags()
+	@Delete("/interact/:id")
+	async deleteInteract(
+		@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID,
+	) {
+		try {
+			return await this.interactionService.delete(id);
 		} catch (error) {
 			return error;
 		}

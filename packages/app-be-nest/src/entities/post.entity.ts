@@ -64,7 +64,10 @@ export class Post {
 		if (this.interactions) {
 			return this.interactions
 				.filter((interaction) => !!interaction)
-				.map((interaction) => interaction.user.fullName);
+				.map((interaction) => ({
+					id: interaction.id,
+					name: interaction.user.fullName,
+				}));
 		}
 		return [];
 	}
