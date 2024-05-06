@@ -36,10 +36,7 @@ export class User {
 	interactions: Interaction[];
 
 	// one to one relation, the one who have the joinColumn have the relation in the dabatabase
-	@OneToOne(() => Auth, (auth) => auth.user, {
-		nullable: false,
-		cascade: true,
-	})
+	@OneToOne(() => Auth, (auth) => auth.user)
 	@JoinColumn()
 	account: Auth;
 }

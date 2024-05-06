@@ -5,6 +5,7 @@ import {
 	CreateDateColumn,
 	DeleteDateColumn,
 	Entity,
+	JoinColumn,
 	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
@@ -49,7 +50,8 @@ export class Auth {
 	deletedAt?: Date;
 
 	@OneToOne(() => User, (user) => user.account, {
-		nullable: false,
+		cascade: true,
 	})
+	@JoinColumn()
 	user: User;
 }
