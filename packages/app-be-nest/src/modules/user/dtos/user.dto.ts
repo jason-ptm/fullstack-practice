@@ -1,15 +1,11 @@
-import { ApiProperty, OmitType, PartialType } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
 import {
 	IsNotEmpty,
-	IsNotEmptyObject,
 	IsNumber,
-	IsObject,
 	IsPositive,
 	IsString,
 	Max,
 } from "class-validator";
-import { CreateAuthDto } from "./auth.dto";
 
 export class CreateUserDto {
 	@IsNotEmpty()
@@ -23,15 +19,6 @@ export class CreateUserDto {
 	@Max(150)
 	@ApiProperty()
 	age: number;
-
-	@IsNotEmpty()
-	@IsObject()
-	@IsNotEmptyObject()
-	@Type(() => CreateAuthDto)
-	@ApiProperty()
-	account: CreateAuthDto;
 }
 
-export class UpdateUserDto extends PartialType(
-	OmitType(CreateUserDto, ["account"]),
-) {}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}

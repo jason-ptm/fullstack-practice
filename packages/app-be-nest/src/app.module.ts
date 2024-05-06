@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import config from "./config/config";
 import configSchema from "./config/config.schema";
 import { DatabaseModule } from "./database/database/database.module";
+import { AuthModule } from "./modules/auth/auth.module";
 import { PostModule } from "./modules/post/post.module";
 import { UserModule } from "./modules/user/user.module";
 
@@ -16,6 +17,7 @@ import { UserModule } from "./modules/user/user.module";
 		}),
 		DatabaseModule,
 		UserModule,
+		AuthModule,
 		PostModule,
 	],
 })

@@ -5,11 +5,13 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Patch,
-	Post,
+	Req,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { UUID } from "crypto";
-import { CreateUserDto, UpdateUserDto } from "./dtos/user.dto";
+import { Request } from "express";
+import { PayloadToken } from "src/models/token.model";
+import { UpdateUserDto } from "./dtos/user.dto";
 import { UserService } from "./user.service";
 
 @ApiTags("users")
@@ -35,22 +37,11 @@ export class UserController {
 		}
 	}
 
-	@Post()
-	async create(@Body() user: CreateUserDto) {
+	@Patch()
+	async update(@Body() user: UpdateUserDto, @Req() req: Request) {
 		try {
-			return await this.userService.create(user);
-		} catch (error) {
-			return error;
-		}
-	}
-
-	@Patch("/:id")
-	async update(
-		@Body() user: UpdateUserDto,
-		@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID,
-	) {
-		try {
-			return await this.userService.update(user, id);
+			const { sub } = req.user as PayloadToken;
+			return await this.userService.update(user, sub.user);
 		} catch (error) {
 			return error;
 		}
