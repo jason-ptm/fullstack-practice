@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+	Injectable,
+	NotFoundException,
+	UnauthorizedException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UUID } from "crypto";
 import { Post } from "src/entities/post.entity";
@@ -12,6 +16,18 @@ export class PostService {
 		@InjectRepository(Post) private postRepository: Repository<Post>,
 		private userService: UserService,
 	) {}
+
+	async create(data: CreatePostDto, userId: UUID) {
+		const owner = await this.userService.findOne(userId);
+		const postData = {
+			content: data.content,
+			title: data.title,
+			owner,
+		};
+		const postCreated = this.postRepository.create(postData);
+		await this.postRepository.insert(postCreated);
+		return postCreated;
+	}
 
 	async findAll() {
 		return await this.postRepository.find({
@@ -32,31 +48,24 @@ export class PostService {
 	}
 
 	async findOne(id: UUID) {
-		const post = await this.postRepository.findOneBy({ id });
+		const post = await this.postRepository.findOne({
+			where: { id },
+			relations: ["owner"],
+		});
 		if (!post) throw new NotFoundException();
 		return post;
 	}
 
-	async update(data: UpdatePostDto, id: UUID) {
-		await this.findOne(id);
+	async update(data: UpdatePostDto, id: UUID, userId: UUID) {
+		const post = await this.findOne(id);
+		if (post.owner.id !== userId) throw new UnauthorizedException();
 		await this.postRepository.update(id, data);
 		return data;
 	}
 
-	async create(data: CreatePostDto) {
-		const owner = await this.userService.findOne(data.ownerId);
-		const postData = {
-			content: data.content,
-			title: data.title,
-			owner,
-		};
-		const postCreated = this.postRepository.create(postData);
-		await this.postRepository.insert(postCreated);
-		return { id: postCreated.id };
-	}
-
-	async delete(id: UUID) {
-		await this.findOne(id);
+	async delete(id: UUID, userId: UUID) {
+		const post = await this.findOne(id);
+		if (post.owner.id !== userId) throw new UnauthorizedException();
 		this.postRepository.softDelete(id);
 		return { id };
 	}

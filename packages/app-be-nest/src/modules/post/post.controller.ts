@@ -7,9 +7,14 @@ import {
 	ParseUUIDPipe,
 	Patch,
 	Post,
+	Req,
+	UseGuards,
 } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { UUID } from "crypto";
+import { Request } from "express";
+import { PayloadToken } from "src/models/token.model";
+import { AuthorizationGuard } from "src/modules/auth/guards/auth/authorization.guard";
 import { InteractionDto } from "./dtos/interaction.dto";
 import { CreatePostDto, UpdatePostDto } from "./dtos/post.dto";
 import { InteractionService } from "./interaction.service";
@@ -17,6 +22,7 @@ import { PostService } from "./post.service";
 
 @ApiTags("post")
 @Controller("posts")
+@UseGuards(AuthorizationGuard)
 export class PostController {
 	constructor(
 		private readonly postService: PostService,
@@ -45,9 +51,10 @@ export class PostController {
 
 	@ApiTags()
 	@Post()
-	async create(@Body() data: CreatePostDto) {
+	async create(@Body() data: CreatePostDto, @Req() req: Request) {
 		try {
-			return await this.postService.create(data);
+			const { sub } = req.user as PayloadToken;
+			return await this.postService.create(data, sub.user);
 		} catch (error) {
 			return error;
 		}
@@ -68,9 +75,11 @@ export class PostController {
 	async update(
 		@Body() data: UpdatePostDto,
 		@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID,
+		@Req() req: Request,
 	) {
 		try {
-			return await this.postService.update(data, id);
+			const { sub } = req.user as PayloadToken;
+			return await this.postService.update(data, id, sub.user);
 		} catch (error) {
 			return error;
 		}
@@ -78,9 +87,13 @@ export class PostController {
 
 	@ApiTags()
 	@Delete("/:id")
-	async delete(@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID) {
+	async delete(
+		@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID,
+		@Req() req: Request,
+	) {
 		try {
-			return await this.postService.delete(id);
+			const { sub } = req.user as PayloadToken;
+			return await this.postService.delete(id, sub.user);
 		} catch (error) {
 			return error;
 		}
