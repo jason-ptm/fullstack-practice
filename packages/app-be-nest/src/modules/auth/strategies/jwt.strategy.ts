@@ -20,7 +20,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
 
 	validate(payload: PayloadToken) {
 		const validation = tokenSchema.validate(payload.sub);
-		if (!!validation.error) throw new UnauthorizedException();
+		if (!!validation.error)
+			throw new UnauthorizedException("Invalid token");
 		return payload;
 	}
 }
