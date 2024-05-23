@@ -15,4 +15,10 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
-}
+  max_line_length: [
+    true,
+    {
+      limit: 20,
+    },
+  ],
+};
