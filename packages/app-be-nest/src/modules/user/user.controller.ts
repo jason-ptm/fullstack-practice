@@ -31,7 +31,7 @@ export class UserController {
 	@Get("/:id")
 	async findOne(@Param("id", new ParseUUIDPipe({ version: "4" })) id: UUID) {
 		try {
-			return await this.userService.findOne(id);
+			return await this.userService.findOneWithAccount(id);
 		} catch (error) {
 			return error;
 		}

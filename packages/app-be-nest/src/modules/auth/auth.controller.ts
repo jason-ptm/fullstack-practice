@@ -14,7 +14,11 @@ import { Public } from "src/decorators/public.decorator";
 import { Auth } from "src/entities/auth.entity";
 import { PayloadToken } from "src/models/token.model";
 import { AuthService } from "./auth.service";
-import { CreateAuthDto, UpdateEmailDto, UpdatePasswordDto } from "./dto/auth.dto";
+import {
+	CreateAuthDto,
+	UpdateEmailDto,
+	UpdatePasswordDto,
+} from "./dto/auth.dto";
 import { AuthorizationGuard } from "./guards/auth/authorization.guard";
 
 @UseGuards(AuthorizationGuard)
@@ -57,7 +61,10 @@ export class AuthController {
 	) {
 		try {
 			const { sub } = req.user as PayloadToken;
-			return await this.authService.updatePassword(updateData, sub.account);
+			return await this.authService.updatePassword(
+				updateData,
+				sub.account,
+			);
 		} catch (error) {
 			return error;
 		}

@@ -35,25 +35,21 @@ export class Post {
 	interactions: Interaction[];
 
 	@CreateDateColumn({
-		type: "timestamp",
-		default: () => "CURRENT_TIMESTAMP",
 		nullable: false,
+		type: "timestamp with time zone",
 		name: "created_at",
 	})
 	createdAt: Date;
 
 	@UpdateDateColumn({
-		type: "timestamp",
-		default: () => "CURRENT_TIMESTAMP",
-		onUpdate: "CURRENT_TIMESTAMP",
 		nullable: false,
+		type: "timestamp with time zone",
 		name: "updated_at",
 	})
 	updatedAt: Date;
 
 	@Exclude()
 	@DeleteDateColumn({
-		type: "timestamp",
 		default: null,
 		name: "deleted_at",
 	})
@@ -66,7 +62,8 @@ export class Post {
 				.filter((interaction) => !!interaction)
 				.map((interaction) => ({
 					id: interaction.id,
-					name: interaction.user.fullName,
+					fullName: interaction.user.fullName,
+					userId: interaction.user.id,
 				}));
 		}
 		return [];

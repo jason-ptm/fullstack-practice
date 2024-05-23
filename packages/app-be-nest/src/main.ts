@@ -10,12 +10,15 @@ async function bootstrap() {
 		new ValidationPipe({
 			whitelist: true,
 			forbidNonWhitelisted: true,
+			transform: true,
 		}),
 	);
 
 	app.useGlobalInterceptors(
 		new ClassSerializerInterceptor(app.get(Reflector)),
 	);
+
+	app.enableCors();
 
 	const config = new DocumentBuilder()
 		.setTitle("Social red")

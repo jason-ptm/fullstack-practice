@@ -15,17 +15,45 @@ export class InteractionService {
 		private userService: UserService,
 	) {}
 
-	async create(postId: UUID, userId: UUID) {
-		const post = await this.postService.findOne(postId);
-		const user = await this.userService.findOne(userId);
-
-		const interaction = this.interactionRepository.create({ post, user });
-		await this.interactionRepository.insert(interaction);
-		return { liked: true };
+	async searchByPostAndUser(postId: UUID, userId: UUID) {
+		const interaction = await this.interactionRepository.findOne({
+			where: {
+				post: {
+					id: postId,
+				},
+				user: {
+					id: userId,
+				},
+			},
+		});
+		return interaction;
 	}
 
-	async delete(id: UUID) {
-		await this.interactionRepository.delete(id);
-		return { liked: false };
+	async interact(postId: UUID, userId: UUID) {
+		const checkInteraction = await this.searchByPostAndUser(postId, userId);
+		if (!checkInteraction) {
+			const post = await this.postService.findOne(postId);
+			const user = await this.userService.findOne(userId);
+
+			const interaction = this.interactionRepository.create({
+				post,
+				user,
+			});
+			await this.interactionRepository.insert(interaction);
+
+			return {
+				id: interaction.id,
+				fullName: user.fullName,
+				userId: user.id,
+			};
+		} else {
+			await this.interactionRepository.delete(
+				checkInteraction.id,
+			);
+
+			return {
+				id: checkInteraction.id,
+			};
+		}
 	}
 }

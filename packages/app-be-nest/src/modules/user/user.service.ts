@@ -17,7 +17,7 @@ export class UserService {
 		});
 	}
 
-	async findOne(id: UUID) {
+	async findOneWithAccount(id: UUID) {
 		const user = await this.userRepository.findOne({
 			relations: ["account"],
 			where: { id },
@@ -32,8 +32,17 @@ export class UserService {
 		return user;
 	}
 
+	async findOne(id: UUID) {
+		const user = await this.userRepository.findOne({
+			where: { id },
+		});
+
+		if (!user) throw new NotFoundException("User not found");
+		return user;
+	}
+
 	async update(data: UpdateUserDto, id: UUID) {
-		await this.findOne(id);
+		await this.findOneWithAccount(id);
 		await this.userRepository.update(id, data);
 		return data;
 	}
